@@ -1,4 +1,3 @@
-# Jenkinsfil
 pipeline {
     agent any
 
@@ -8,14 +7,19 @@ pipeline {
                     sh 'git clone https://github.com/raoufcherfa/employe.git'
                 }
             }
-        stage('Build') {
+        stage('Docker build') {
             steps {
-                sh 'pip install -r requirements.txt'
+                sh 'docker build -t employe:1.0 .'
             }
         }
-        stage('Test') {
+        stage('Docker run') {
             steps {
-                sh 'pytest tests/'
+                sh 'docker run -d -p 8081:8081 employe:1.0'
+            }
+        }
+        stage('tests unitaires') {
+            steps {
+                sh 'pytest unit-test.py'
             }
         }
     }
