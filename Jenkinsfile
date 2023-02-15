@@ -17,7 +17,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'flask run'
+                sh 'python app.py'
             }
         }
     }
