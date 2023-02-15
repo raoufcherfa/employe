@@ -17,7 +17,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'pytest'
+                sh 'pytest unit_tests.py'
             }
         }
         stage('Run API') {
@@ -25,19 +25,9 @@ pipeline {
                 sh 'python app.py &'
             }
         }
-        stage('Test API') {
-            steps {
-                sh 'pytest unit_tests.py'
-            }
-        }
         stage('Merge to Dev') {
             steps {
                 sh 'git checkout Dev && git merge master'
-            }
-        }
-        stage('Deploy to Dev') {
-            steps {
-                sh 'fab deploy_dev'
             }
         }
     }
