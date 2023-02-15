@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('clone github repo') {
                 steps {
-                    sh 'git clone https://github.com/raoufcherfa/employe.git'
+                    git 'https://github.com/raoufcherfa/employe.git'
                 }
             }
         stage('tests unitaires') {
