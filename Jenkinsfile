@@ -7,22 +7,19 @@ pipeline {
                     git 'https://github.com/raoufcherfa/employe.git'
                 }
             }
-
-       stage('install env') {
+        stage('Docker build') {
             steps {
-                sh 'pip install --no-cache-dir -r requirements.txt'
+                sh 'docker build -t employe:1.0 .'
             }
         }
-
-        stage('build python app') {
+        stage('Docker run') {
             steps {
-                sh 'python app.py'
+                sh 'docker run -d -p 8081:8081 employe:1.0 --name=container_employe'
             }
         }
-
         stage('tests unitaires') {
                 steps {
-                    sh 'pytest unit_tests.py'
+                    sh 'docker exec container_employe bash -c "pytest unit_tests.py"'
                 }
             }
     }
