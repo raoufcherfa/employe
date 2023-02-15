@@ -7,17 +7,6 @@ pipeline {
                     git 'https://github.com/raoufcherfa/employe.git'
                 }
             }
-        stage('install docker') {
-                steps {
-                    sh '''
-                            # Download the Docker installation script
-                            curl -fsSL https://get.docker.com -o get-docker.sh
-
-                            # Run the Docker installation script with sudo privileges
-                            sh get-docker.sh --no-wsl
-                        '''
-                }
-            }
         stage('Docker build') {
             steps {
                 sh 'docker build -t employe:1.0 .'
