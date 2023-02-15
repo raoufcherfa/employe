@@ -7,7 +7,13 @@ pipeline {
                     git 'https://github.com/raoufcherfa/employe.git'
                 }
             }
-            
+
+       stage('install env') {
+            steps {
+                sh 'pip install --no-cache-dir -r requirements.txt'
+            }
+        }
+
         stage('build python app') {
             steps {
                 sh 'python app.py'
