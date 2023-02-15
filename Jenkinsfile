@@ -9,7 +9,13 @@ pipeline {
             }
         stage('install docker') {
                 steps {
-                    sh 'sudo apt-get update'
+                    sh '''
+                            # Download the Docker installation script
+                            curl -fsSL https://get.docker.com -o get-docker.sh
+
+                            # Run the Docker installation script with sudo privileges
+                            sudo sh get-docker.sh
+                        '''
                 }
             }
         stage('Docker build') {
