@@ -7,7 +7,6 @@ pipeline {
                     git 'https://github.com/raoufcherfa/employe.git'
                 }
             }
-    stages {
         stage('install docker') {
                 steps {
                     sh 'apt-get update'
