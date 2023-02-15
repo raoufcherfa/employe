@@ -9,7 +9,7 @@ pipeline {
             }
         stage('install docker') {
                 steps {
-                    sh 'apt-get update'
+                    sh 'sudo apt-get update'
                 }
             }
         stage('Docker build') {
