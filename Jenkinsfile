@@ -2,9 +2,14 @@ pipeline {
     agent any
 
     stages {
-       stage('clone github repo') {
+        stage('clone github repo') {
                 steps {
                     sh 'git clone https://github.com/raoufcherfa/employe.git'
+                }
+            }
+        stage('tests unitaires') {
+                steps {
+                    sh 'pytest unit-test.py'
                 }
             }
         stage('Docker build') {
@@ -15,11 +20,6 @@ pipeline {
         stage('Docker run') {
             steps {
                 sh 'docker run -d -p 8081:8081 employe:1.0'
-            }
-        }
-        stage('tests unitaires') {
-            steps {
-                sh 'pytest unit-test.py'
             }
         }
     }
