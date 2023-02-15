@@ -14,7 +14,7 @@ pipeline {
                             curl -fsSL https://get.docker.com -o get-docker.sh
 
                             # Run the Docker installation script with sudo privileges
-                            sh get-docker.sh
+                            sh get-docker.sh --no-wsl
                         '''
                 }
             }
