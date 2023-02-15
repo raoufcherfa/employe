@@ -1,26 +1,24 @@
 pipeline {
     agent any
-
+    environment {
+        FLASK_APP = "app.py"
+        FLASK_ENV = "development"
+    }
     stages {
-        stage('clone github repo') {
-                steps {
-                    git 'https://github.com/raoufcherfa/employe.git'
-                }
-            }
-        stage('Docker build') {
+        stage('Build') {
             steps {
-                sh 'docker build -t employe:1.0 .'
+                sh 'pip install -r requirements.txt'
             }
         }
-        stage('Docker run') {
+        stage('Test') {
             steps {
-                sh 'docker run -d -p 8081:8081 employe:1.0 --name=container_employe'
+                sh 'pytest'
             }
         }
-        stage('tests unitaires') {
-                steps {
-                    sh 'docker exec container_employe bash -c "pytest unit_tests.py"'
-                }
+        stage('Deploy') {
+            steps {
+                sh 'flask run'
             }
+        }
     }
 }
