@@ -30,5 +30,10 @@ pipeline {
                 sh 'git checkout Dev && git merge master'
             }
         }
+        stage('Deploy to Dev') {
+            steps {
+                sh 'fab deploy_dev'
+            }
+        }
     }
 }
