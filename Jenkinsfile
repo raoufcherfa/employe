@@ -7,6 +7,12 @@ pipeline {
                     git 'https://github.com/raoufcherfa/employe.git'
                 }
             }
+    stages {
+        stage('install docker') {
+                steps {
+                    sh 'apt-get update'
+                }
+            }
         stage('Docker build') {
             steps {
                 sh 'docker build -t employe:1.0 .'
