@@ -17,24 +17,24 @@ jobs:
     steps:
       - name: Set Environment Variables
         run: |
-          echo "FLASK_APP=app.py" >> $GITHUB_ENV
+          echo "FLASK_APP=../../app.py" >> $GITHUB_ENV
           echo "FLASK_ENV=development" >> $GITHUB_ENV
       - name: Install Dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r ../../requirements.txt
 
   test:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Run Tests
-        run: pytest unit_tests.py
+        run: pytest ../../unit_tests.py
 
   run-api:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Start API
-        run: python app.py &
+        run: python ../../app.py &
 
   merge-to-dev:
     needs: run-api
