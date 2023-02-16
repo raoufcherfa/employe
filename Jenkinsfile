@@ -32,7 +32,7 @@ pipeline {
         }
         stage('Deploy to Dev') {
             steps {
-                sh 'fab deploy_dev'
+                sh 'echo "http://localhost:5000"'
             }
         }
     }
