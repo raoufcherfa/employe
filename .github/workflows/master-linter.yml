@@ -20,7 +20,9 @@ jobs:
           echo "FLASK_APP=app.py" >> $GITHUB_ENV
           echo "FLASK_ENV=development" >> $GITHUB_ENV
       - name: Install Dependencies
-        run: pip install flask && pip install pytest
+        run: |
+          pip install flask 
+          pip install pytest
 
   test:
     needs: build
@@ -39,15 +41,6 @@ jobs:
     steps:
       - name: Start API
         run: python app.py &
-
-  merge-to-dev:
-    needs: run-api
-    runs-on: ubuntu-latest
-    steps:
-      - name: Merge to Dev Branch
-        run: |
-          git checkout Dev
-          git merge origin/master
 
   deploy-to-dev:
     needs: merge-to-dev
