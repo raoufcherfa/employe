@@ -20,7 +20,7 @@ jobs:
           echo "FLASK_APP=../../app.py" >> $GITHUB_ENV
           echo "FLASK_ENV=development" >> $GITHUB_ENV
       - name: Install Dependencies
-        run: ls -R
+        run: pip install flask && pip install pytest
 
   test:
     needs: build
