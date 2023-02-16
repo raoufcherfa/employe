@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Set Environment Variables
         run: |
-          echo "FLASK_APP=../../app.py" >> $GITHUB_ENV
+          echo "FLASK_APP=app.py" >> $GITHUB_ENV
           echo "FLASK_ENV=development" >> $GITHUB_ENV
       - name: Install Dependencies
         run: pip install flask && pip install pytest
@@ -26,15 +26,21 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          pip3 install pytest
       - name: Run Tests
-        run: pytest ../../unit_tests.py
+        run: pytest unit_tests.py
+
 
   run-api:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Start API
-        run: python ../../app.py &
+        run: python app.py &
 
   merge-to-dev:
     needs: run-api
@@ -42,7 +48,7 @@ jobs:
     steps:
       - name: Merge to Dev Branch
         run: |
-          git checkout Dev
+          git checkout dev
           git merge origin/master
 
   deploy-to-dev:
