@@ -20,7 +20,7 @@ jobs:
           echo "FLASK_APP=../../app.py" >> $GITHUB_ENV
           echo "FLASK_ENV=development" >> $GITHUB_ENV
       - name: Install Dependencies
-        run: pwd &&  ls
+        run: ls -R
 
   test:
     needs: build
@@ -42,7 +42,7 @@ jobs:
     steps:
       - name: Merge to Dev Branch
         run: |
-          git checkout dev
+          git checkout Dev
           git merge origin/master
 
   deploy-to-dev:
