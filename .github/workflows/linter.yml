@@ -26,8 +26,14 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          pip3 install pytest
       - name: Run Tests
         run: pytest unit_tests.py
+
 
   run-api:
     needs: build
