@@ -28,9 +28,7 @@ jobs:
     steps:
       - name: Install Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-pip
-          pip3 install pytest
+          pip install pytest
       - name: Run Tests
         run: pytest unit_tests.py
 
@@ -48,7 +46,7 @@ jobs:
     steps:
       - name: Merge to Dev Branch
         run: |
-          git checkout dev
+          git checkout Dev
           git merge origin/master
 
   deploy-to-dev:
