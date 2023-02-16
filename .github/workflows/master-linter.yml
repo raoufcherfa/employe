@@ -34,7 +34,6 @@ jobs:
       - name: Run Tests
         run: pytest unit_tests.py
 
-
   run-api:
     needs: build
     runs-on: ubuntu-latest
@@ -43,7 +42,7 @@ jobs:
         run: python app.py &
 
   deploy-to-dev:
-    needs: run-api:
+    needs: run-api
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to Dev Environment
