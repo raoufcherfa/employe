@@ -1,57 +1,64 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from pymongo import MongoClient
 
 app = Flask(__name__)
 CORS(app)
+client = MongoClient('mongodb://root:example@mongo:27017/')
+db = client["db"]
+col = db["employees"]
 
-employees = [
-    {
-        'id': 1,
-        'firstName': 'Karim',
-        'lastName': 'Benzema',
-        'emailId': 'Benzema@gmail.com'
-    },
-    {
-        'id': 2,
-        'firstName': 'Leo',
-        'lastName': 'Messi',
-        'emailId': 'Messi@gmail.com'
-    },
-    {
-        'id': 3,
-        'firstName': 'Ronaldo',
-        'lastName': 'Cristiano',
-        'emailId': 'Cristiano@gmail.com'
-    },
-]
 
-@app.route('/said/mikail', methods=['GET'])
-def get_said():
-    return "Happy Birthday Lenny :)"
+class EmployeeAPI:
+    def __init__(self):
+        pass
+    
+    @staticmethod
+    @app.route('/api/v1/employees', methods=['GET', 'POST'])
+    def employees():
+        if request.method == 'GET':
+            cursor = col.find({}, {'_id': 0})
+            employees_list = [employee for employee in cursor]
+            return jsonify(employees_list), 200
 
-@app.route('/api/v1/employees', methods=['GET', 'POST'])
-def manage_employees():
-    if request.method == 'GET':
-        return jsonify(employees)
+        if request.method == 'POST':
+            data = request.get_json()
+            cursor = col.find({}, {'_id': 0})
+            try:
+                employee_id = max([employee['id'] for employee in cursor]) + 1
+            except ValueError:
+                employee_id = 1
+            data['id'] = employee_id
+            col.insert_one(data)
+            return jsonify(data), 200
 
-    if request.method == 'POST':
-        employee = request.get_json()
-        employee['id'] = employees[-1]['id'] + 1
-        employees.append(employee)
-        return jsonify(employee), 201
+    @staticmethod
+    @app.route('/api/v1/employees/<int:employee_id>', methods=['GET', 'DELETE', 'PUT'])
+    def employee(employee_id):
+        if request.method == 'GET':
+            employee = col.find_one({'id': employee_id}, {'_id': 0})
+            if employee:
+                return jsonify(employee), 200
+            else:
+                return jsonify({'message': 'Employee not found'}), 404
 
-@app.route('/api/v1/employees/<int:employee_id>', methods=['GET', 'DELETE'])
-def manage_employee(employee_id):
-    employee = [employee for employee in employees if employee['id'] == employee_id]
-    if len(employee) == 0:
-        return jsonify({'error': 'employee not found'})
+        if request.method == 'DELETE':
+            result = col.delete_one({'id': employee_id})
+            if result.deleted_count == 1:
+                return jsonify({'message': 'Employee deleted successfully'}), 200
+            else:
+                return jsonify({'message': 'Employee not found'}), 404
 
-    if request.method == 'GET':
-        return jsonify(employee[0])
+        if request.method == 'PUT':
+            data = request.get_json()
+            result = col.update_one({'id': employee_id}, {'$set': data})
+            if result.modified_count == 1:
+                return jsonify({'message': 'Employee updated successfully'}), 200
+            else:
+                return jsonify({'message': 'Employee not found'}), 404
 
-    if request.method == 'DELETE':
-        employees.remove(employee[0])
-        return jsonify({'result': 'employee deleted'})
+
+api = EmployeeAPI()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
