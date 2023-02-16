@@ -43,7 +43,7 @@ jobs:
         run: python app.py &
 
   deploy-to-dev:
-    needs:  run-api:
+    needs: run-api:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to Dev Environment
