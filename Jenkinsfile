@@ -22,7 +22,7 @@ pipeline {
         }
         stage('Merge to Dev') {
             steps {
-                sh 'git checkout Dev && git merge origin/master'
+                sh 'git checkout -b Dev && git merge origin/master'
             }
         }
         stage('Deploy to Dev') {
